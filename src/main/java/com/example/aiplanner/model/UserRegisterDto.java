@@ -15,9 +15,9 @@ public class UserRegisterDto {
 
     @NotBlank(message = "비밀번호는 필수입니다.")
     @Size(min=6, message = "비밀번호는 최소 6자리 이상입니다.")
-    private String password;
+    private String userpassword;
 
     @NotBlank(message = "사용자 이메일은 필수입니다.")
     @Email(message = "올바르지 않는 이메일 형식입니다.")
-    private String email;
+    private String useremail;
 }
