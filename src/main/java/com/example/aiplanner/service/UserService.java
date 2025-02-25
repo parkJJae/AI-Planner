@@ -1,6 +1,7 @@
 package com.example.aiplanner.service;
 
 import com.example.aiplanner.model.UserEntity;
+import com.example.aiplanner.model.UserLoginDto;
 import com.example.aiplanner.model.UserRegisterDto;
 import com.example.aiplanner.model.UserResponseDto;
 import com.example.aiplanner.repository.UserRepository;
@@ -29,5 +30,15 @@ public class UserService {
                 .orElseThrow(() -> new RuntimeException("사용자가 없습니다."));
                 // 예외 처리 사용자 아이디가 존재하지 않을 때
         return new UserResponseDto(userEntity); // Entity → DTO 변환 후 반환
+    }
+
+    public UserResponseDto loginUser(UserLoginDto userLoginDto) {
+        UserEntity userEntity = userRepository.findByUseremail(userLoginDto.getUseremail())
+         .orElseThrow(() -> new RuntimeException("해당 이메일의 사용자가 없습니다."));
+
+        if (!passwordEncoder.matches(userLoginDto.getUserpassword(), userEntity.getUserpassword())) {
+            throw new IllegalArgumentException("비밀번호가 틀렸습니다.");
+        }
+        return new UserResponseDto(userEntity);
     }
     }
