@@ -17,7 +17,8 @@ public class SecurityConfig {
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(new AntPathRequestMatcher("/api/auth/**")).permitAll() // 회원가입, 로그인은 누구나 접근 가능
+                        .requestMatchers(new AntPathRequestMatcher("/users/register")).permitAll() // 회원가입 누구나 허용
+                        .requestMatchers(new AntPathRequestMatcher("/users/**")).permitAll() // 로그인, 회원가입 관련 경로 인증 없이 가능
                         .requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll() // H2 콘솔 허용
                         .requestMatchers(new AntPathRequestMatcher("/api/planner/**")).authenticated() // 플래너 관련 API는 로그인 필요
                         .anyRequest().authenticated() // 나머지는 로그인 필요
@@ -25,6 +26,7 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")) // H2 콘솔 CSRF 예외
                         .disable() // API 방식에서는 CSRF 비활성화
+
                 )
                 .headers(headers -> headers
                         .addHeaderWriter(new XFrameOptionsHeaderWriter(
