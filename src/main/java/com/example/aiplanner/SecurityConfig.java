@@ -24,6 +24,8 @@ public class SecurityConfig {
                         .anyRequest().authenticated() // 나머지는 로그인 필요
                 )
                 .csrf(csrf -> csrf
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/register")) // 회원가입 CSRF 예외
+                        .ignoringRequestMatchers(new AntPathRequestMatcher("/users/login")) // 로그인 CSRF 예외
                         .ignoringRequestMatchers(new AntPathRequestMatcher("/h2-console/**")) // H2 콘솔 CSRF 예외
                         .disable() // API 방식에서는 CSRF 비활성화
 
