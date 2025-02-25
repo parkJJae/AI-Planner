@@ -9,10 +9,15 @@ import lombok.Setter;
 public class UserResponseDto {
     private String username;
     private String useremail;
+    private String errorMessage;
 
 
     public UserResponseDto(UserEntity userEntity) {
         this.username = userEntity.getUsername();
         this.useremail = userEntity.getUseremail();
+    }
+
+    public UserResponseDto(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
 }
