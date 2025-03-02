@@ -1,5 +1,5 @@
 // 회원 조회 ( 엔티티를 Dto로 변환 )
-package com.example.aiplanner.model;
+package com.example.aiplanner.model.user;
 
 import lombok.Getter;
 import lombok.Setter;
