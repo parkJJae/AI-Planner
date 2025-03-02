@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>플래너 생성</title>
+    <script>
+        async function submitPlanner(event) {
+            event.preventDefault(); // 기본 제출 방지
+
+            const formData = new FormData(event.target);
+            const requestData = {
+                tasks: [formData.get("task")], // 입력된 할 일을 리스트로 변환
+            };
+
+            try {
+                const response = await fetch("/planner-generate?userId=1", { // userId를 임시로 1로 설정
+                    method: "POST",
+                    credentials: 'include',  // 세션 쿠키 포함
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(requestData),
+                });
+
+                if (response.ok) {
+                    const result = await response.json(); // JSON 응답 받기
+
+                    // 생성된 플래너 제목 출력
+                    document.getElementById("plannerResult").innerText = "생성된 플래너 제목: " + result.plannerTitle;
+
+                    // 할 일 목록 출력
+                    const tasks = result.tasks || []; // tasks 배열을 안전하게 처리
+                    const taskList = document.getElementById("taskList");
+                    taskList.innerHTML = "";  // 기존 할 일 목록 초기화
+
+                    tasks.forEach(task => {
+                        const listItem = document.createElement("li");
+                        listItem.innerText = task.taskName; // 각 할 일 항목 표시 (task.taskName이 할 일 이름이라 가정)
+                        taskList.appendChild(listItem);
+                    });
+
+                } else {
+                    alert("플래너 생성 실패!");
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                alert("오류가 발생했습니다.");
+            }
+        }
+    </script>
+</head>
+<body>
+<h2>AI 플래너 생성</h2>
+<form onsubmit="submitPlanner(event)">
+    <label for="task">할 일</label>
+    <input type="text" id="task" name="task" required><br><br>
+
+    <button type="submit">AI 플래너 생성</button>
+</form>
+
+<h3>생성된 플래너</h3>
+<p id="plannerResult">여기에 생성된 플래너 제목이 표시됩니다.</p>
+
+<h3>할 일 목록:</h3>
+<ul id="taskList">
+    <!-- 할 일 목록이 여기에 나타납니다 -->
+</ul>
+</body>
+</html>
