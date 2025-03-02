@@ -1,6 +1,6 @@
 package com.example.aiplanner;
 
-import com.example.aiplanner.model.UserEntity;
+import com.example.aiplanner.model.user.UserEntity;
 import com.example.aiplanner.repository.UserRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
