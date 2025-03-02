@@ -1,4 +1,4 @@
-package com.example.aiplanner.model;
+package com.example.aiplanner.model.user;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
