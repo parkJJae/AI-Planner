@@ -1,9 +1,9 @@
 package com.example.aiplanner.service;
 
-import com.example.aiplanner.model.UserEntity;
-import com.example.aiplanner.model.UserLoginDto;
-import com.example.aiplanner.model.UserRegisterDto;
-import com.example.aiplanner.model.UserResponseDto;
+import com.example.aiplanner.model.user.UserEntity;
+import com.example.aiplanner.model.user.UserLoginDto;
+import com.example.aiplanner.model.user.UserRegisterDto;
+import com.example.aiplanner.model.user.UserResponseDto;
 import com.example.aiplanner.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
