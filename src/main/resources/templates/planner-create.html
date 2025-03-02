@@ -4,6 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>플래너 생성</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .task-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .task-item {
+            margin-bottom: 10px;
+        }
+
+        .task-item input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .task-item.completed {
+            text-decoration: line-through;
+            color: gray;
+        }
+    </style>
     <script>
         async function submitPlanner(event) {
             event.preventDefault(); // 기본 제출 방지
@@ -34,7 +58,32 @@
 
                     tasks.forEach(task => {
                         const listItem = document.createElement("li");
-                        listItem.innerText = task.taskName; // 각 할 일 항목 표시 (task.taskName이 할 일 이름이라 가정)
+                        listItem.classList.add("task-item");
+
+                        // 체크박스 추가
+                        const checkbox = document.createElement("input");
+                        checkbox.type = "checkbox";
+                        checkbox.id = task.taskName;
+                        checkbox.checked = task.status === "COMPLETED";  // 상태가 "COMPLETED"일 경우 체크
+                        checkbox.addEventListener("change", function() {
+                            const status = checkbox.checked ? "COMPLETED" : "PENDING";
+                            updateTaskStatus(task.id, status);  // 상태 업데이트 함수 호출
+                            if (checkbox.checked) {
+                                listItem.classList.add("completed");
+                            } else {
+                                listItem.classList.remove("completed");
+                            }
+                        });
+
+                        // 할 일 내용 추가
+                        const taskDetail = `
+                            <label for="${checkbox.id}">
+                                ${task.taskName} <br>
+                                \
+                            </label>
+                        `;
+
+                        listItem.innerHTML = checkbox.outerHTML + taskDetail;
                         taskList.appendChild(listItem);
                     });
 
@@ -44,6 +93,24 @@
             } catch (error) {
                 console.error("Error:", error);
                 alert("오류가 발생했습니다.");
+            }
+        }
+
+        // 할 일 상태 업데이트 함수 (서버로 상태 전송)
+        async function updateTaskStatus(taskId, status) {
+            try {
+                const response = await fetch(`/update-task-status?taskId=${taskId}&status=${status}`, {
+                    method: "POST",
+                    credentials: 'include',  // 세션 쿠키 포함
+                    headers: { "Content-Type": "application/json" },
+                });
+
+                if (!response.ok) {
+                    throw new Error("상태 업데이트 실패");
+                }
+            } catch (error) {
+                console.error("Error updating task status:", error);
+                alert("상태 업데이트에 실패했습니다.");
             }
         }
     </script>
@@ -61,7 +128,7 @@
 <p id="plannerResult">여기에 생성된 플래너 제목이 표시됩니다.</p>
 
 <h3>할 일 목록:</h3>
-<ul id="taskList">
+<ul id="taskList" class="task-list">
     <!-- 할 일 목록이 여기에 나타납니다 -->
 </ul>
 </body>
