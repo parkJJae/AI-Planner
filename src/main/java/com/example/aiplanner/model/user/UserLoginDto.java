@@ -1,4 +1,4 @@
-package com.example.aiplanner.model;
+package com.example.aiplanner.model.user;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
