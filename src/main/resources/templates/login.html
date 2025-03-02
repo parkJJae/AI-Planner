@@ -24,8 +24,8 @@
                 .then(response => {
                     if (response.status === 200) {
                         alert('로그인 성공!');
-                        // 로그인 성공 시 다른 페이지로 리다이렉트 할 수 있음 (예: 대시보드)
-                        window.location.href = '/dashboard'; // 예시: 대시보드 페이지로 이동
+                        // 로그인 성공 시 플래너 생성 페이지로 리다이렉트
+                        window.location.href = '/planner-create'; // 플래너 생성 페이지로 이동
                     } else {
                         throw new Error('로그인 실패');
                     }
