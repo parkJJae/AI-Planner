@@ -32,7 +32,7 @@ public class AIPlannerService {
 
     // 최신 무료 모델 Gemini 2.0 Flash 사용
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=AIzaSyAZ-Y4dN9GriecS7zs4lLyRas93eDmuLoA";
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=내 키";
 
     /**
      * 사용자가 입력한 할 일 목록을 바탕으로 AI가 자동으로 플래너를 생성하는 메서드
