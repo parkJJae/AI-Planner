@@ -30,13 +30,10 @@ public class AIPlannerService {
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    // 최신 무료 모델 Gemini 2.0 Flash 사용
+    // Gemini 2.0 Flash 사용
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=보안 때매 내 키 안 적음";
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=AIzaSyAZ-Y4dN9GriecS7zs4lLyRas93eDmuLoA";
 
-    /**
-     * 사용자가 입력한 할 일 목록을 바탕으로 AI가 자동으로 플래너를 생성하는 메서드
-     */
     public PlannerEntity generateAIPlanner(Long userId, List<String> tasks) {
         UserEntity user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
@@ -165,7 +162,6 @@ public class AIPlannerService {
                         .path("text")
                         .asText();
 
-                // 예시: generatedText 내에서 bullet ("*", "-") 로 시작하는 줄을 할 일로 간주
                 String[] lines = generatedText.split("\n");
                 for (String line : lines) {
                     line = line.trim();
