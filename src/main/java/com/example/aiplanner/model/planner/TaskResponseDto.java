@@ -1,5 +1,5 @@
 package com.example.aiplanner.model.planner;
-
+import com.example.aiplanner.model.planner.TaskEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
