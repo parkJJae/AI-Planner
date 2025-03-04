@@ -21,8 +21,7 @@ public class UserService {
             userEntity.setUsername(userRegisterDto.getUsername());
             userEntity.setUseremail(userRegisterDto.getUseremail());
             userEntity.setUserpassword(passwordEncoder.encode(userRegisterDto.getUserpassword()));
-            this.userRepository.save(userEntity);
-            return userEntity;
+            return this.userRepository.save(userEntity);
     }
 
     public UserResponseDto getUser(Long userId) {
