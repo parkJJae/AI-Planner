@@ -25,20 +25,20 @@ public class PlannerEntity {
     @OneToMany(mappedBy = "planner", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TaskEntity> tasks = new ArrayList<>();
 
-    @Column(nullable = false)
+   @Column(nullable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
+   @Column(nullable = false)
     private boolean completed;
 
     @Column(nullable = false)
     private boolean aiGenerated;
 
-    @Column(nullable = false)
-    private boolean deleted;
+   @Column(nullable = false)
+   private boolean deleted;
 
     @Column(nullable = false)
     private String plannerTitle;
@@ -49,26 +49,9 @@ public class PlannerEntity {
 
     // 기본 생성자에서 초기화
     public PlannerEntity() {
-        this.status = PlannerStatus.PENDING; // 기본값 설정
+       this.status = PlannerStatus.PENDING; // 기본값 설정
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
-    public void markAsCompleted() {
-        this.completed = true;
-        this.updatedAt = LocalDateTime.now();
-        this.status = PlannerStatus.COMPLETED;
-    }
-
-    public void markAsDeleted() {
-        this.deleted = true;
-        this.updatedAt = LocalDateTime.now();
-        this.status = PlannerStatus.DELETED;
-    }
-
-    public void restorePlanner() {
-        this.deleted = false;
-        this.updatedAt = LocalDateTime.now();
-        this.status = PlannerStatus.ACTIVE;
-    }
 }
