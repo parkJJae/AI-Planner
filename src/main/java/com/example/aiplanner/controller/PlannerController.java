@@ -17,9 +17,6 @@ public class PlannerController {
 
     private final AIPlannerService aiPlannerService;
 
-    /**
-     * AI가 플래너를 생성하는 API
-     */
     @PostMapping("/planner-create")
     public PlannerEntity createPlanner(@RequestParam Long userId,
                                        @RequestBody List<String> tasks) {
