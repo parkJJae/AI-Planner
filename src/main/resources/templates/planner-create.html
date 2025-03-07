@@ -96,23 +96,6 @@
             }
         }
 
-        // 할 일 상태 업데이트 함수 (서버로 상태 전송)
-        async function updateTaskStatus(taskId, status) {
-            try {
-                const response = await fetch(`/update-task-status?taskId=${taskId}&status=${status}`, {
-                    method: "POST",
-                    credentials: 'include',  // 세션 쿠키 포함
-                    headers: { "Content-Type": "application/json" },
-                });
-
-                if (!response.ok) {
-                    throw new Error("상태 업데이트 실패");
-                }
-            } catch (error) {
-                console.error("Error updating task status:", error);
-                alert("상태 업데이트에 실패했습니다.");
-            }
-        }
     </script>
 </head>
 <body>
