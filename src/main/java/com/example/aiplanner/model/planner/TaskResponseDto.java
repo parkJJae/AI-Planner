@@ -19,9 +19,9 @@ public class TaskResponseDto {
     public TaskResponseDto(TaskEntity taskEntity) {
         this.id = taskEntity.getId();
         this.taskName = taskEntity.getTaskName();
-        this.startTime = taskEntity.getStartTime();
-        this.endTime = taskEntity.getEndTime();
-        this.completed = taskEntity.isCompleted();
+        //this.startTime = taskEntity.getStartTime();
+        //this.endTime = taskEntity.getEndTime();
+        //this.completed = taskEntity.isCompleted();
     }
 
 }
