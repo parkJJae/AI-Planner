@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity
 @AllArgsConstructor
+@NoArgsConstructor
 @Data
 public class PlannerEntity {
     @Id
@@ -28,30 +29,30 @@ public class PlannerEntity {
    @Column(nullable = false)
     private LocalDateTime createdAt;
 
-    @Column(nullable = false)
-    private LocalDateTime updatedAt;
+    //@Column(nullable = false)
+    //private LocalDateTime updatedAt;
 
-   @Column(nullable = false)
-    private boolean completed;
+   //@Column(nullable = false)
+   // private boolean completed;
 
     @Column(nullable = false)
     private boolean aiGenerated;
 
-   @Column(nullable = false)
-   private boolean deleted;
+   //@Column(nullable = false)
+   //private boolean deleted;
 
     @Column(nullable = false)
     private String plannerTitle;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private PlannerStatus status = PlannerStatus.PENDING; // 기본값 설정
+    //@Enumerated(EnumType.STRING)
+    //@Column(nullable = false)
+   // private PlannerStatus status = PlannerStatus.PENDING; // 기본값 설정
 
     // 기본 생성자에서 초기화
-    public PlannerEntity() {
-       this.status = PlannerStatus.PENDING; // 기본값 설정
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    //public PlannerEntity() {
+       //his.status = PlannerStatus.PENDING; // 기본값 설정
+       // this.createdAt = LocalDateTime.now();
+       // this.updatedAt = LocalDateTime.now();
     }
 
-}
+
