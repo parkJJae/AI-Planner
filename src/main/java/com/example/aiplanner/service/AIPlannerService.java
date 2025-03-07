@@ -32,7 +32,7 @@ public class AIPlannerService {
     private final UserRepository userRepository;
 
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=보안";
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=AIzaSyAZ-Y4dN9GriecS7zs4lLyRas93eDmuLoA";
 
     // Gemini AI에 보낼 요청 데이터를 JSON 형식으로 만드는 메서드
     private String createAIRequestBody(List<String> tasks) {
@@ -100,7 +100,7 @@ public class AIPlannerService {
         // 플래너 저장 (초기 단계)
         PlannerEntity savedPlanner = plannerRepository.save(planner);
 
-        // AI 응답을 파싱해서 TaskEntity 목록 생성
+        // AI 응답을 파싱해서 TaskEntity 목록 생성 (GEMINI 응답을 TaskEntity에 저장하기 위함)
         List<TaskEntity> taskEntities = parseAndCreateTasks(savedPlanner, aiSchedule);
         // 만약 파싱 결과가 없으면, 입력받은 할 일 목록을 폴백으로 사용
         if (taskEntities.isEmpty()) {
@@ -123,15 +123,13 @@ public class AIPlannerService {
         return savedPlanner;
     }
 
-    /**
-     * Gemini API 응답(JSON)을 파싱하여 TaskEntity 목록을 생성하는 메서드
-     */
+    // Json을 분석하여 TaskEntity에 저장하는 매서드
     private List<TaskEntity> parseAndCreateTasks(PlannerEntity planner, String aiSchedule) {
         List<TaskEntity> taskEntities = new ArrayList<>();
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode rootNode = objectMapper.readTree(aiSchedule);
-            JsonNode candidates = rootNode.path("candidates");
+            JsonNode rootNode = objectMapper.readTree(aiSchedule); // Tree형식으로
+            JsonNode candidates = rootNode.path("candidates"); // GEMINI JSON응답에 첫 번째 candidates포함
             if (candidates.isArray() && candidates.size() > 0) {
                 // 첫 번째 후보의 content.parts[0].text 추출
                 String generatedText = candidates.get(0)
@@ -144,8 +142,8 @@ public class AIPlannerService {
                 String[] lines = generatedText.split("\n");
                 for (String line : lines) {
                     line = line.trim();
-                    if (line.startsWith("*") || line.startsWith("-")) {
-                        String taskTitle = line.substring(1).trim();
+                    if (line.startsWith("*") || line.startsWith("-")) { // 보통 AI 응답에서 List형식으로 되면 보통 *또는 -을 처음 시작에 사용한다고 함
+                       String taskTitle = line.substring(1).trim();
                         if (!taskTitle.isEmpty()) {
                             TaskEntity task = new TaskEntity();
                             task.setPlanner(planner);
