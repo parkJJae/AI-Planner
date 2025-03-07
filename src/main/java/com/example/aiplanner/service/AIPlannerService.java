@@ -16,6 +16,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,43 +26,24 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class AIPlannerService {
 
-    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate; // HTTP 요청을 보내기 위함
     private final PlannerRepository plannerRepository;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
 
-    // Gemini 2.0 Flash 사용
     private static final String GEMINI_API_URL =
-            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=AIzaSyAZ-Y4dN9GriecS7zs4lLyRas93eDmuLoA";
+            "https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent?key=보안";
 
-    public PlannerEntity generateAIPlanner(Long userId, List<String> tasks) {
-        UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
-
-        // AI에 요청할 데이터 생성
-        String requestBody = createAIRequestBody(tasks);
-
-        // Gemini API 호출
-        String aiGeneratedSchedule = callAIService(requestBody);
-
-        // AI가 생성한 일정 파싱 후 저장 (할 일 목록 포함)
-        PlannerEntity planner = savePlanner(user, aiGeneratedSchedule, tasks);
-
-        return planner;
-    }
-
-    /**
-     * Gemini API 요청을 위한 JSON 데이터를 생성하는 메서드
-     */
+    // Gemini AI에 보낼 요청 데이터를 JSON 형식으로 만드는 메서드
     private String createAIRequestBody(List<String> tasks) {
-        // 각 task를 쉼표로 구분하여 하나의 문자열로 생성
+       // 할 일 목록을 쉼표로 구분된 하나의 문자열로 예: "운동하기, 공부하기, 요리하기"
         String taskListString = tasks.stream()
                 .collect(Collectors.joining(", "));
 
         return "{ " +
                 "\"contents\": [{" +
                 "\"parts\": [{" +
-                "\"text\": \"다음 할 일들을 기반으로 일정을 생성해 주세요: " + taskListString + "\"" +
+                "\"text\": \"다음 할 일들을 기반으로 24시간 각 일정을 만들어줘(예: 07:00시 기상): " + taskListString + "\"" +
                 "}]" +
                 "}], " +
                 "\"generationConfig\": {" +
@@ -87,16 +69,13 @@ public class AIPlannerService {
                 "}";
     }
 
-    /**
-     * Gemini API 호출 메서드
-     */
+   // Gemini에 요청을 보내고, Gemini의 응답을 반환
     private String callAIService(String requestBody) {
         try {
             HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setContentType(MediaType.APPLICATION_JSON); //이게 없으면 서버가 요청을 JSON 형식으로 인식못함
             HttpEntity<String> entity = new HttpEntity<>(requestBody, headers);
-            String response = restTemplate.postForObject(GEMINI_API_URL, entity, String.class);
-            System.out.println("Gemini API 응답: " + response);
+            String response = restTemplate.postForObject(GEMINI_API_URL, entity, String.class); // Post요청을 보내고 응답을 받아옴
             return response;
         } catch (Exception e) {
             System.err.println("AI 서비스 호출 중 오류 발생: " + e.getMessage());
@@ -111,12 +90,12 @@ public class AIPlannerService {
         PlannerEntity planner = new PlannerEntity();
         planner.setUser(user);
         planner.setCreatedAt(LocalDateTime.now());
-        planner.setUpdatedAt(LocalDateTime.now());
-        planner.setPlannerTitle("AI 생성 플래너");
+        //planner.setUpdatedAt(LocalDateTime.now());
+        planner.setPlannerTitle(LocalDate.now()+"일 일정");
         planner.setAiGenerated(true);
-        planner.setCompleted(false);
-        planner.setDeleted(false);
-        planner.setStatus(PlannerStatus.PENDING);
+        //planner.setCompleted(false);
+        //planner.setDeleted(false);
+        //planner.setStatus(PlannerStatus.PENDING);
 
         // 플래너 저장 (초기 단계)
         PlannerEntity savedPlanner = plannerRepository.save(planner);
@@ -130,7 +109,7 @@ public class AIPlannerService {
                         TaskEntity t = new TaskEntity();
                         t.setPlanner(savedPlanner);
                         t.setTaskName(task);
-                        t.setCompleted(false);
+                       // t.setCompleted(false);
                         return t;
                     })
                     .collect(Collectors.toList());
@@ -171,7 +150,7 @@ public class AIPlannerService {
                             TaskEntity task = new TaskEntity();
                             task.setPlanner(planner);
                             task.setTaskName(taskTitle);
-                            task.setCompleted(false);
+                           // task.setCompleted(false);
                             taskEntities.add(task);
                         }
                     }
@@ -181,5 +160,21 @@ public class AIPlannerService {
             System.err.println("AI 응답 파싱 중 오류 발생: " + e.getMessage());
         }
         return taskEntities;
+    }
+
+    public PlannerEntity generateAIPlanner(Long userId, List<String> tasks) {
+        UserEntity user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        // AI에 요청할 데이터 생성
+        String requestBody = createAIRequestBody(tasks);
+
+        // Gemini API 호출
+        String aiGeneratedSchedule = callAIService(requestBody);
+
+        // AI가 생성한 일정 파싱 후 저장 (할 일 목록 포함)
+        PlannerEntity planner = savePlanner(user, aiGeneratedSchedule, tasks);
+
+        return planner;
     }
 }
