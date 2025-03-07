@@ -25,11 +25,11 @@ public class PlannerResponseDto {
     public PlannerResponseDto(PlannerEntity planner) {
         this.id = planner.getId();
         this.plannerTitle = planner.getPlannerTitle();
-        this.completed = planner.isCompleted();
+        //this.completed = planner.isCompleted();
         this.aiGenerated = planner.isAiGenerated();
-        this.deleted = planner.isDeleted();
+        //this.deleted = planner.isDeleted();
         // status가 null일 경우 "UNKNOWN"으로 설정
-        this.status = (planner.getStatus() != null) ? planner.getStatus().toString() : "UNKNOWN";
+        //this.status = (planner.getStatus() != null) ? planner.getStatus().toString() : "UNKNOWN";
         this.tasks = planner.getTasks().stream()
                 .map(TaskResponseDto::new) // TaskEntity -> TaskResponseDto 변환
                 .collect(Collectors.toList());
