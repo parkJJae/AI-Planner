@@ -22,8 +22,5 @@ public class UserViewController {
     public String showPlannerCreatePage() {
         return "planner-create";
     }
-    @GetMapping("/planner-generate")
-    public ModelAndView showPlannerForm() {
-        return new ModelAndView("planner-generate"); // templates/planner-generate.html 반환
-    }
+
 }
